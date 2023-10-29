@@ -18,14 +18,17 @@ public class Server
         listener.Start();
         while (true)
         {
-            using TcpClient client = await listener.AcceptTcpClientAsync();
-            _ = Process(client);
+            TcpClient client = await listener.AcceptTcpClientAsync();
+            _ = HandleClientAsync(client);
         }
     }
 
-    private async Task Process(TcpClient client)
+    private async Task HandleClientAsync(TcpClient client)
     {
-        await using NetworkStream stream = client.GetStream();
-        await _apiHandler.HandleAsync(stream);
+        using (client)
+        {
+            await using NetworkStream stream = client.GetStream();
+            await _apiHandler.HandleAsync(stream);
+        }
     }
 }
