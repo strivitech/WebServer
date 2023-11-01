@@ -1,23 +1,24 @@
 using System.Net.Sockets;
+using WebServer.Core.Response;
 
-namespace WebServer.Core;
+namespace WebServer.Core.Request;
 
-public class RequestReader : IRequestReader
+public class HttpRequestReader : IHttpRequestReader
 {
-    public async Task<Request> ReadAsync(NetworkStream stream)
+    public async Task<HttpRequest> ReadAsync(NetworkStream stream)
     {
         using var reader = new StreamReader(stream, leaveOpen: true);
         var metadata = await ReadMetadata(reader);
         var headers = await ReadHeaders(reader);
         var body = await ReadBody(headers, reader);
 
-        return new Request(metadata, headers, body);
+        return new HttpRequest(metadata, headers, body);
     }
 
-    private static async Task<RequestMetadata> ReadMetadata(StreamReader reader)
+    private static async Task<HttpRequestMetadata> ReadMetadata(StreamReader reader)
     {
         string? line = await reader.ReadLineAsync();
-        var metadata = RequestParser.ParseMetadata(line);
+        var metadata = HttpRequestParser.ParseMetadata(line);
         return metadata;
     }
 
@@ -28,8 +29,11 @@ public class RequestReader : IRequestReader
         {
             int contentLength = int.Parse(contentLengthHeader);
             char[] bodyChars = new char[contentLength];
-            await reader.ReadAsync(bodyChars, 0, contentLength);
-            body = new string(bodyChars);
+            if (contentLength > 0)
+            {
+                await reader.ReadAsync(bodyChars, 0, contentLength);
+                body = new string(bodyChars);
+            }
         }
 
         return body;
@@ -41,15 +45,10 @@ public class RequestReader : IRequestReader
         var headers = new Dictionary<string, string>();
         while (!string.IsNullOrWhiteSpace(line = await reader.ReadLineAsync()))
         {
-            var header = RequestParser.ParseHeader(line);
+            var header = HttpRequestParser.ParseHeader(line);
             headers.Add(header.Key, header.Value);
         }
 
         return headers;
     }
-}
-
-public interface IRequestReader
-{
-    Task<Request> ReadAsync(NetworkStream stream);
 }

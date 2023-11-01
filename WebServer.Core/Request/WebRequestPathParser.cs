@@ -1,6 +1,7 @@
 ﻿using System.Web;
+using WebServer.Core.ControllersContext;
 
-namespace WebServer.Core;
+namespace WebServer.Core.Request;
 
 public class WebRequestPathParser
 {
@@ -33,7 +34,7 @@ public class WebRequestPathParser
 
     private static List<string> GetPathSegments(string path)
     {
-        return path.Split('/').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+        return path.Split('/').Skip(1).ToList();
     }
 
     private string DetermineControllerPath(List<string> segments, out int segmentsTaken)
@@ -65,7 +66,7 @@ public class WebRequestPathParser
 
     private static List<string> GetRemainingSegments(List<string> segments, int segmentsTaken)
     {
-        return segments.Skip(segmentsTaken).ToList();
+        return segments.Skip(segmentsTaken).Select(x => x.ToLower()).ToList();
     }
 
     private static Dictionary<string, string?> ExtractQueryParameters(string queryString)
@@ -74,6 +75,6 @@ public class WebRequestPathParser
 
         return nameValueCollection.AllKeys
             .Where(key => key is not null)
-            .ToDictionary(key => key!, key => nameValueCollection[key]);
+            .ToDictionary(key => key!.ToLower(), key => nameValueCollection[key]);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WebServer.Core;
+﻿namespace WebServer.Core.Request;
 
 public class WebRequestRoute
 {

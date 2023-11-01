@@ -1,8 +1,8 @@
-namespace WebServer.Core;
+namespace WebServer.Core.Request;
 
-public static class RequestParser
+public static class HttpRequestParser
 {
-    public static RequestMetadata ParseMetadata(string? line)
+    public static HttpRequestMetadata ParseMetadata(string? line)
     {
         if (string.IsNullOrWhiteSpace(line))
         {
@@ -14,7 +14,7 @@ public static class RequestParser
         var path = parts[1];
         var version = parts[2];
         
-        return new RequestMetadata(method, path, version);
+        return new HttpRequestMetadata(method, path, version);
     }
 
     public static (string Key, string Value) ParseHeader(string line)
