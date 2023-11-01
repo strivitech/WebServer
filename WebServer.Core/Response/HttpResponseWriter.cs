@@ -1,19 +1,18 @@
-using System.Net;
 using System.Text;
 using System.Text.Json;
 
-namespace WebServer.Core;
+namespace WebServer.Core.Response;
 
-public class ResponseWriter : IResponseWriter
+public class HttpResponseWriter : IHttpResponseWriter
 {
-    public async Task WriteAsync(Stream stream, Response response)
+    public async Task WriteAsync(Stream stream, HttpResponse httpResponse)
     {
         await using var writer = new StreamWriter(stream, leaveOpen: true);
-        string responseBody = JsonSerializer.Serialize(response.Content);
+        string responseBody = JsonSerializer.Serialize(httpResponse.Content);
         int contentLength = Encoding.UTF8.GetByteCount(responseBody);
         
         var responseBuilder = new StringBuilder();
-        responseBuilder.AppendLine($"HTTP/1.1 {(int)response.StatusCode} {response.StatusCode}");
+        responseBuilder.AppendLine($"HTTP/1.1 {(int)httpResponse.StatusCode} {httpResponse.StatusCode}");
         responseBuilder.AppendLine("Content-Type: application/json; charset=UTF-8");
         responseBuilder.AppendLine($"Content-Length: {contentLength}");
         responseBuilder.AppendLine();
@@ -32,7 +31,7 @@ public class ResponseWriter : IResponseWriter
     }
 }
 
-public interface IResponseWriter
+public interface IHttpResponseWriter
 {
-    Task WriteAsync(Stream stream, Response response);
+    Task WriteAsync(Stream stream, HttpResponse httpResponse);
 }
