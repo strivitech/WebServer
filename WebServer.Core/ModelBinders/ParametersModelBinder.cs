@@ -1,0 +1,59 @@
+﻿using WebServer.Core.Common;
+using WebServer.Core.ControllersContext.Actions;
+
+namespace WebServer.Core.ModelBinders;
+
+public class ParametersModelBinder : IParametersModelBinder
+{
+    private readonly IList<string> _urlParameters;
+    private readonly ActionInternalInfo _methodInternalInfo;
+    private readonly IStringToTypeConverter _stringToTypeConverter;
+
+    public ParametersModelBinder(IList<string> urlParameters, ActionInternalInfo methodInternalInfo,
+        IStringToTypeConverter stringToTypeConverter)
+    {
+        _urlParameters = urlParameters;
+        _methodInternalInfo = methodInternalInfo;
+        _stringToTypeConverter = stringToTypeConverter;
+    }
+
+    public IList<object?>? Bind()
+    {
+        var parametersBindingModelTypes = _methodInternalInfo
+            .Parameters
+            .Where(pi => pi.CustomAttributes.Count() == 1
+                         && pi.CustomAttributes.First().AttributeType == typeof(FromParametersAttribute))
+            .Select(pi => pi.ParameterType)
+            .ToList();
+
+        if (parametersBindingModelTypes.Count == 0)
+        {
+            return null;
+        }
+
+        if (parametersBindingModelTypes.Any(IsCustomClass))
+        {
+            throw new InvalidOperationException(
+                $"Action {_methodInternalInfo.Name} in controller has binding model, but it is not a primitive type");
+        }
+
+        if (parametersBindingModelTypes.Count != _urlParameters.Count)
+        {
+            throw new InvalidOperationException(
+                $"Action {_methodInternalInfo.Name} in controller has {_urlParameters.Count} url parameters, but binding model has {parametersBindingModelTypes.Count}");
+        }
+
+        return parametersBindingModelTypes
+            .Select((t, i) => (object?)_stringToTypeConverter.Convert(_urlParameters[i], t))
+            .ToList();
+    }
+
+    private static bool IsCustomClass(Type type)
+    {
+        return type.IsClass &&
+               type is { IsPrimitive: false, IsValueType: false } &&
+               type != typeof(string) &&
+               !type.IsArray &&
+               !typeof(Delegate).IsAssignableFrom(type);
+    }
+}
