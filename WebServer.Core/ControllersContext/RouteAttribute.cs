@@ -1,4 +1,4 @@
-﻿namespace WebServer.Core;
+﻿namespace WebServer.Core.ControllersContext;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class RouteAttribute : Attribute
