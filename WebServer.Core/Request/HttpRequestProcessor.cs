@@ -4,7 +4,7 @@ using WebServer.Core.ModelBinders;
 
 namespace WebServer.Core.Request;
 
-public class HttpRequestProcessor
+public class HttpRequestProcessor : IHttpRequestProcessor
 {
     private readonly IControllerFactory _controllerFactory;
     private readonly IBindersFactory _bindersFactory;

@@ -8,12 +8,12 @@ public class ControllerApiHandler : IApiHandler
 {
     private readonly IHttpRequestReader _httpRequestReader;
     private readonly IHttpResponseWriter _httpResponseWriter;
-    private readonly HttpRequestProcessor _httpRequestProcessor;
+    private readonly IHttpRequestProcessor _httpRequestProcessor;
 
     public ControllerApiHandler(
         IHttpRequestReader httpRequestReader, 
         IHttpResponseWriter httpResponseWriter,
-        HttpRequestProcessor httpRequestProcessor)
+        IHttpRequestProcessor httpRequestProcessor)
     {
         _httpRequestReader = httpRequestReader;
         _httpResponseWriter = httpResponseWriter;
