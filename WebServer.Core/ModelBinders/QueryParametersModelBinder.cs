@@ -17,29 +17,58 @@ public class QueryParametersModelBinder : IQueryParametersModelBinder
         _stringToTypeConverter = stringToTypeConverter;
     }
 
-    public object? Bind()
+    public IList<object?>? Bind()
     {
-        var queryParametersBindingModelType = _methodInternalInfo
+        var queryParametersBindingModels = _methodInternalInfo
             .Parameters
             .Where(pi => pi.CustomAttributes.Count() == 1
                          && pi.CustomAttributes.First().AttributeType == typeof(FromQueryAttribute))
-            .Select(pi => pi.ParameterType)
-            .SingleOrDefault();
+            .Select(pi => new { Name = pi.Name, Type = pi.ParameterType })
+            .ToList();
 
-        if (queryParametersBindingModelType is null)
+        if (queryParametersBindingModels.Count == 0)
         {
             return null;
         }
 
-        var bindingModel = Activator.CreateInstance(queryParametersBindingModelType);
-        foreach (var propertyInfo in queryParametersBindingModelType.GetProperties())
+        if (queryParametersBindingModels.Count == 1 &&
+            CustomClass.IsCustomClass(queryParametersBindingModels.First().Type))
         {
-            if (_queryParameters.TryGetValue(propertyInfo.Name.ToLower(), out var value) && value is not null)
+            var queryParametersBindingModelType = queryParametersBindingModels.First();
+            var bindingModel = Activator.CreateInstance(queryParametersBindingModelType.Type);
+            foreach (var propertyInfo in queryParametersBindingModelType.Type.GetProperties())
             {
-                propertyInfo.SetValue(bindingModel, _stringToTypeConverter.Convert(value, propertyInfo.PropertyType));
+                if (_queryParameters.TryGetValue(propertyInfo.Name.ToLower(), out var value) && value is not null)
+                {
+                    propertyInfo.SetValue(bindingModel,
+                        _stringToTypeConverter.Convert(value, propertyInfo.PropertyType));
+                }
+            }
+
+            return new List<object?> { bindingModel };
+        }
+
+        if (queryParametersBindingModels.Count > 1 &&
+            queryParametersBindingModels.Any(x => CustomClass.IsCustomClass(x.Type)))
+        {
+            throw new InvalidOperationException(
+                $"Action {_methodInternalInfo.Name} in controller has binding model, but it is not a primitive type");
+        }
+
+        var queryParameterArgs = new List<object?>();
+
+        foreach (var queryParametersBindingModel in queryParametersBindingModels)
+        {
+            if (_queryParameters.TryGetValue(queryParametersBindingModel.Name!, out var value) && value is not null)
+            {
+                queryParameterArgs.Add(_stringToTypeConverter.Convert(value, queryParametersBindingModel.Type));
+            }
+            else
+            {
+                queryParameterArgs.Add(default);
             }
         }
 
-        return bindingModel;
+        return queryParameterArgs;
     }
 }

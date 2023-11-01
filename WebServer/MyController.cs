@@ -7,14 +7,14 @@ namespace WebServer;
 public class MyController : ControllerBase
 {
     [HttpPost]
-    [ActionName(nameof(PostPersonInfo))]
-    public async Task<IActionResult> PostPersonInfo(
+    [ActionName(nameof(PostInfo))]
+    public async Task<IActionResult> PostInfo(
         [FromBody] Person person,
         [FromParameters] string country,
         [FromParameters] string city,
         [FromParameters] string street,
         [FromQuery] Car car)
-    {   
+    {
         return await Ok(new
         {
             Person = person,
@@ -35,10 +35,10 @@ public class Person
 
     public int Age { get; set; }
 }
-
+    
 public class Car
 {
     public string Model { get; set; } = null!;
-    
+
     public int Year { get; set; }
 }
