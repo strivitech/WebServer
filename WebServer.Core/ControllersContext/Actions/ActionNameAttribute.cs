@@ -1,4 +1,4 @@
-﻿namespace WebServer.Core;
+﻿namespace WebServer.Core.ControllersContext.Actions;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class ActionNameAttribute : Attribute
