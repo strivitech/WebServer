@@ -1,6 +1,6 @@
-﻿namespace WebServer.Core;
+﻿namespace WebServer.Core.Common;
 
-public enum HttpMethods
+public enum HttpMethod
 {
     Get,
     Post, 
