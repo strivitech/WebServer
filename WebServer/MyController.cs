@@ -34,6 +34,8 @@ public class Person
     public string Name { get; set; } = null!;
 
     public int Age { get; set; }
+    
+    public List<string> Hobbies { get; set; } = null!;
 }
     
 public class Car
