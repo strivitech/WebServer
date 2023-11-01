@@ -31,7 +31,7 @@ public class ParametersModelBinder : IParametersModelBinder
             return null;
         }
 
-        if (parametersBindingModelTypes.Any(IsCustomClass))
+        if (parametersBindingModelTypes.Any(CustomClass.IsCustomClass))
         {
             throw new InvalidOperationException(
                 $"Action {_methodInternalInfo.Name} in controller has binding model, but it is not a primitive type");
@@ -46,14 +46,5 @@ public class ParametersModelBinder : IParametersModelBinder
         return parametersBindingModelTypes
             .Select((t, i) => (object?)_stringToTypeConverter.Convert(_urlParameters[i], t))
             .ToList();
-    }
-
-    private static bool IsCustomClass(Type type)
-    {
-        return type.IsClass &&
-               type is { IsPrimitive: false, IsValueType: false } &&
-               type != typeof(string) &&
-               !type.IsArray &&
-               !typeof(Delegate).IsAssignableFrom(type);
     }
 }

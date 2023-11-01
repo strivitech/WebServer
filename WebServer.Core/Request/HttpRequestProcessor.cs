@@ -40,7 +40,7 @@ public class HttpRequestProcessor
         var queryParametersModel = queryParametersModelBinder.Bind();
         if (queryParametersModel is not null)
         {
-            args.Add(queryParametersModel);
+            args.AddRange(queryParametersModel);
         }
     }
 

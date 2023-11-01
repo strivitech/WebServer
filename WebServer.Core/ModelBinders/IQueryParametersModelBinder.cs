@@ -1,5 +1,5 @@
 ﻿namespace WebServer.Core.ModelBinders;
 
-public interface IQueryParametersModelBinder : IModelBinder<object>
+public interface IQueryParametersModelBinder : IModelBinder<IList<object?>?>
 {
 }
