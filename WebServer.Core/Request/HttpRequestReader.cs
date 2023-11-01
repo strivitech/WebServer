@@ -10,9 +10,25 @@ public class HttpRequestReader : IHttpRequestReader
         using var reader = new StreamReader(stream, leaveOpen: true);
         var metadata = await ReadMetadata(reader);
         var headers = await ReadHeaders(reader);
+        
+        ValidateContentType(headers);
+        
         var body = await ReadBody(headers, reader);
 
         return new HttpRequest(metadata, headers, body);
+    }
+
+    private static void ValidateContentType(Dictionary<string, string> headers)
+    {
+        if (!headers.TryGetValue("Content-Type", out var contentType))
+        {
+            throw new InvalidOperationException("Content-Type header is missing");
+        }
+
+        if (!contentType.Contains("application/json"))
+        {
+            throw new InvalidOperationException("Content-Type header is not application/json");
+        }
     }
 
     private static async Task<HttpRequestMetadata> ReadMetadata(StreamReader reader)
