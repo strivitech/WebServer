@@ -1,34 +1,18 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using WebServer.Core.Transport;
 
 namespace WebServer.Core;
 
 public class Server
 {
-    private readonly IApiHandler _apiHandler;
+    private readonly ITransportProtocolBasedServer _transportProtocolBasedServer;
 
-    public Server(IApiHandler apiHandler)
+    public Server(ITransportProtocolBasedServer transportProtocolBasedServer)
     {
-        _apiHandler = apiHandler;
+        _transportProtocolBasedServer = transportProtocolBasedServer;
     }
-    
+
     public async Task RunAsync()
     {
-        using TcpListener listener = new TcpListener(IPAddress.Any, 80);
-        listener.Start();
-        while (true)
-        {
-            TcpClient client = await listener.AcceptTcpClientAsync();
-            _ = HandleClientAsync(client);
-        }
-    }
-
-    private async Task HandleClientAsync(TcpClient client)
-    {
-        using (client)
-        {
-            await using NetworkStream stream = client.GetStream();
-            await _apiHandler.HandleAsync(stream);
-        }
+        await _transportProtocolBasedServer.StartAsync();
     }
 }
