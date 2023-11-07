@@ -1,26 +1,29 @@
-using System.Text;
-using System.Text.Json;
+using WebServer.Core.Response.Builder;
 
 namespace WebServer.Core.Response;
 
 public class HttpResponseWriter : IHttpResponseWriter
 {
+    private readonly IResponseBuilder _responseBuilder;
+
+    public HttpResponseWriter(IResponseBuilder responseBuilder)
+    {
+        _responseBuilder = responseBuilder;
+    }
+    
     public async Task WriteAsync(Stream stream, HttpResponse httpResponse)
     {
         await using var writer = new StreamWriter(stream, leaveOpen: true);
-        string responseBody = JsonSerializer.Serialize(httpResponse.Content);
-        int contentLength = Encoding.UTF8.GetByteCount(responseBody);
-        
-        var responseBuilder = new StringBuilder();
-        responseBuilder.AppendLine($"HTTP/1.1 {(int)httpResponse.StatusCode} {httpResponse.StatusCode}");
-        responseBuilder.AppendLine("Content-Type: application/json; charset=UTF-8");
-        responseBuilder.AppendLine($"Content-Length: {contentLength}");
-        responseBuilder.AppendLine();
-        responseBuilder.Append(responseBody);
-        
+
+        string response = _responseBuilder
+            .UseVersion("HTTP/1.1")
+            .WithStatusCode((int)httpResponse.StatusCode, httpResponse.StatusCode.ToString())
+            .WithContent(httpResponse.Content)
+            .Build();
+
         try
         {
-            await writer.WriteAsync(responseBuilder);
+            await writer.WriteAsync(response);
             await writer.FlushAsync();
         }
         catch (Exception exception)
@@ -29,9 +32,4 @@ public class HttpResponseWriter : IHttpResponseWriter
             throw;
         }
     }
-}
-
-public interface IHttpResponseWriter
-{
-    Task WriteAsync(Stream stream, HttpResponse httpResponse);
 }
