@@ -6,6 +6,36 @@ namespace WebServer;
 [Route($"/api/{nameof(MyController)}")]
 public class MyController : ControllerBase
 {
+    [HttpGet]
+    [ActionName(nameof(GetInfo))]
+    public async Task<IActionResult> GetInfo()
+    {
+        return await Ok(new
+        {
+            Person = new Person
+            {
+                Name = "John",
+                Age = 25,
+                Hobbies = new List<string>
+                {
+                    "Football",
+                    "Basketball"
+                }
+            },
+            Address = new
+            {
+                Country = "USA",
+                City = "New York",
+                Street = "Wall Street"
+            },
+            Car = new Car
+            {
+                Model = "BMW",
+                Year = 2020
+            }
+        });
+    }
+    
     [HttpPost]
     [ActionName(nameof(PostInfo))]
     public async Task<IActionResult> PostInfo(
