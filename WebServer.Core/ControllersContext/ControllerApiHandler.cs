@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using WebServer.Core.Request;
 using WebServer.Core.Response;
 
@@ -20,7 +19,7 @@ public class ControllerApiHandler : IApiHandler
         _httpRequestProcessor = httpRequestProcessor;
     }
     
-    public async Task HandleAsync(NetworkStream stream)
+    public async Task HandleAsync(Stream stream)
     {
         var request = await _httpRequestReader.ReadAsync(stream);
         var result = await _httpRequestProcessor.CompleteAsync(request);
