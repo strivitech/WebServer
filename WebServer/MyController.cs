@@ -3,6 +3,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer;
 
+[Rest]
 [Route($"/api/{nameof(MyController)}")]
 public class MyController : ControllerBase
 {
