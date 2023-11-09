@@ -1,6 +1,8 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using WebServer.Core;
+using WebServer.Core.Configuration;
 using WebServer.Core.ControllersContext;
+using WebServer.Core.ControllersContext.Actions;
 using WebServer.Core.ModelBinders;
 using WebServer.Core.Request;
 using WebServer.Core.Request.Headers;
@@ -25,11 +27,11 @@ var serverConfiguration = new ServerConfiguration
     }
 };
 
-var controllerApiHandler = new ControllerApiHandler(new HttpRequestReader(new HttpRequestHeadersValidator(
+var controllerApiHandler = new HttpRequestHandler(new HttpRequestReader(new HttpRequestHeadersValidator(
     new ContentTypeValidator(),
     new ContentLengthValidator())),
     new HttpResponseWriter(new ResponseBuilder()),
-    new HttpRequestProcessor(new ControllerFactory(), new BindersFactory()));
+    new ControllerProcessor(new ControllerFactory(), new BindersFactory(), new ActionInfoFetcherFactory()));
 
 var server = new TcpBasedServer(controllerApiHandler, serverConfiguration);
 await server.StartAsync();
