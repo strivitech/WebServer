@@ -19,12 +19,7 @@ public class ParametersModelBinder : IParametersModelBinder
 
     public IList<object?>? Bind()
     {
-        var parametersBindingModelTypes = _methodInternalInfo
-            .Parameters
-            .Where(pi => pi.CustomAttributes.Count() == 1
-                         && pi.CustomAttributes.First().AttributeType == typeof(FromParametersAttribute))
-            .Select(pi => pi.ParameterType)
-            .ToList();
+        var parametersBindingModelTypes = GetParametersBindingModelTypes();
 
         if (parametersBindingModelTypes.Count == 0)
         {
@@ -46,5 +41,16 @@ public class ParametersModelBinder : IParametersModelBinder
         return parametersBindingModelTypes
             .Select((t, i) => (object?)_stringToTypeConverter.Convert(_urlParameters[i], t))
             .ToList();
+    }
+
+    private List<Type> GetParametersBindingModelTypes()
+    {
+        var parametersBindingModelTypes = _methodInternalInfo
+            .Parameters
+            .Where(pi => pi.CustomAttributes.Count() == 1
+                         && pi.CustomAttributes.First().AttributeType == typeof(FromParametersAttribute))
+            .Select(pi => pi.ParameterType)
+            .ToList();
+        return parametersBindingModelTypes;
     }
 }
