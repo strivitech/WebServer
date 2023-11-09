@@ -1,5 +1,4 @@
 using WebServer.Core.Request.Headers;
-using WebServer.Core.Response;
 
 namespace WebServer.Core.Request;
 

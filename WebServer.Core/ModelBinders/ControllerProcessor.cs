@@ -1,27 +1,30 @@
 using WebServer.Core.ControllersContext;
 using WebServer.Core.ControllersContext.Actions;
-using WebServer.Core.ModelBinders;
+using WebServer.Core.Request;
 
-namespace WebServer.Core.Request;
+namespace WebServer.Core.ModelBinders;
 
-public class HttpRequestProcessor : IHttpRequestProcessor
+public class ControllerProcessor : IHttpRequestProcessor
 {
     private readonly IControllerFactory _controllerFactory;
     private readonly IBindersFactory _bindersFactory;
+    private readonly IActionInfoFetcherFactory _actionInfoFetcherFactory;
 
-    public HttpRequestProcessor(IControllerFactory controllerFactory, IBindersFactory bindersFactory)
+    public ControllerProcessor(IControllerFactory controllerFactory, IBindersFactory bindersFactory,
+        IActionInfoFetcherFactory actionInfoFetcherFactory)
     {
         _controllerFactory = controllerFactory;
         _bindersFactory = bindersFactory;
+        _actionInfoFetcherFactory = actionInfoFetcherFactory;
     }
 
     public async Task<IActionResult> CompleteAsync(HttpRequest httpRequest)
     {
-        var webRequestRoute = new WebRequestPathParser(httpRequest.HttpRequestMetadata.Path).Parse();
+        var webRequestRoute = new ControllerWebRequestPathParser(httpRequest.HttpRequestMetadata.Path).Parse();
         var controllerInternalInfo = ControllerInternalInfoFetcher.Get(webRequestRoute.ControllerRoute);
-        var methodInternalInfo = ActionInternalInfoFetcher.Get(httpRequest.HttpRequestMetadata.Method,
-            controllerInternalInfo.Type.Name,
-            webRequestRoute.ActionName);
+        var actionInfoFetcher = _actionInfoFetcherFactory.Create(controllerInternalInfo,
+            httpRequest.HttpRequestMetadata.Method, webRequestRoute.ActionName);
+        var methodInternalInfo = actionInfoFetcher.Get();
 
         List<object?> args = new();
         BindBody(args, httpRequest, methodInternalInfo);
