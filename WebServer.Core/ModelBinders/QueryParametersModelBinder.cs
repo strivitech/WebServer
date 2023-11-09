@@ -1,4 +1,5 @@
-﻿using WebServer.Core.Common;
+﻿using System.Reflection;
+using WebServer.Core.Common;
 using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ModelBinders;
@@ -19,49 +20,40 @@ public class QueryParametersModelBinder : IQueryParametersModelBinder
 
     public IList<object?>? Bind()
     {
+        var queryParametersBindingModels = GetQueryParametersBindingModels();
+
+        return queryParametersBindingModels.Count switch
+        {
+            0 => null,
+            1 when CustomClass.IsCustomClass(queryParametersBindingModels.First().Type!) => BindCustomClassModel(
+                queryParametersBindingModels),
+            > 1 when queryParametersBindingModels.Any(x => CustomClass.IsCustomClass(x.Type!)) => throw new
+                InvalidOperationException(
+                    $"Action {_methodInternalInfo.Name} in controller has binding model, but it is not a primitive type"),
+            _ => BindSimpleModelTypes(queryParametersBindingModels),
+        };
+    }
+
+    private List<QueryParameterBindingModel> GetQueryParametersBindingModels()
+    {
         var queryParametersBindingModels = _methodInternalInfo
             .Parameters
             .Where(pi => pi.CustomAttributes.Count() == 1
                          && pi.CustomAttributes.First().AttributeType == typeof(FromQueryAttribute))
-            .Select(pi => new { Name = pi.Name, Type = pi.ParameterType })
+            .Select(pi => new QueryParameterBindingModel { Name = pi.Name, Type = pi.ParameterType })
             .ToList();
+        return queryParametersBindingModels;
+    }
 
-        if (queryParametersBindingModels.Count == 0)
-        {
-            return null;
-        }
-
-        if (queryParametersBindingModels.Count == 1 &&
-            CustomClass.IsCustomClass(queryParametersBindingModels.First().Type))
-        {
-            var queryParametersBindingModelType = queryParametersBindingModels.First();
-            var bindingModel = Activator.CreateInstance(queryParametersBindingModelType.Type);
-            foreach (var propertyInfo in queryParametersBindingModelType.Type.GetProperties())
-            {
-                if (_queryParameters.TryGetValue(propertyInfo.Name.ToLower(), out var value) && value is not null)
-                {
-                    propertyInfo.SetValue(bindingModel,
-                        _stringToTypeConverter.Convert(value, propertyInfo.PropertyType));
-                }
-            }
-
-            return new List<object?> { bindingModel };
-        }
-
-        if (queryParametersBindingModels.Count > 1 &&
-            queryParametersBindingModels.Any(x => CustomClass.IsCustomClass(x.Type)))
-        {
-            throw new InvalidOperationException(
-                $"Action {_methodInternalInfo.Name} in controller has binding model, but it is not a primitive type");
-        }
-
+    private List<object?> BindSimpleModelTypes(List<QueryParameterBindingModel> queryParametersBindingModels)
+    {
         var queryParameterArgs = new List<object?>();
 
         foreach (var queryParametersBindingModel in queryParametersBindingModels)
         {
             if (_queryParameters.TryGetValue(queryParametersBindingModel.Name!, out var value) && value is not null)
             {
-                queryParameterArgs.Add(_stringToTypeConverter.Convert(value, queryParametersBindingModel.Type));
+                queryParameterArgs.Add(_stringToTypeConverter.Convert(value, queryParametersBindingModel.Type!));
             }
             else
             {
@@ -70,5 +62,31 @@ public class QueryParametersModelBinder : IQueryParametersModelBinder
         }
 
         return queryParameterArgs;
+    }
+
+    private List<object?> BindCustomClassModel(List<QueryParameterBindingModel> queryParametersBindingModels)
+    {
+        var queryParametersBindingModel = queryParametersBindingModels.First();
+        var bindingModel = Activator.CreateInstance(queryParametersBindingModel.Type!);
+        var properties = ExtractPropertiesFromType(queryParametersBindingModel.Type!);
+        foreach (var propertyInfo in properties)
+        {
+            if (_queryParameters.TryGetValue(propertyInfo.Name.ToLower(), out var value) && value is not null)
+            {
+                propertyInfo.SetValue(bindingModel,
+                    _stringToTypeConverter.Convert(value, propertyInfo.PropertyType));
+            }
+        }
+
+        return new List<object?> { bindingModel };
+    }
+
+    private PropertyInfo[] ExtractPropertiesFromType(Type queryParametersBindingModelType)
+    {
+        ActionsContainer.FullNameToProperties.TryGetValue(queryParametersBindingModelType.FullName!,
+            out var properties);
+
+        return properties ?? throw new InvalidOperationException(
+            $"Action {_methodInternalInfo.Name} in controller has binding model, but it is not a primitive type");
     }
 }
