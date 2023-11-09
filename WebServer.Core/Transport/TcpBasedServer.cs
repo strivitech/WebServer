@@ -3,18 +3,19 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using WebServer.Core.Configuration;
+using WebServer.Core.Request;
 
 namespace WebServer.Core.Transport;
 
 public class TcpBasedServer : ITransportProtocolBasedServer
 {
     private readonly ServerConfiguration _serverConfiguration;
-    private readonly IApiHandler _apiHandler;
+    private readonly IHttpRequestHandler _httpRequestHandler;
 
-    public TcpBasedServer(IApiHandler apiHandler, ServerConfiguration serverConfiguration)
+    public TcpBasedServer(IHttpRequestHandler httpRequestHandler, ServerConfiguration serverConfiguration)
     {
         _serverConfiguration = serverConfiguration;
-        _apiHandler = apiHandler;
+        _httpRequestHandler = httpRequestHandler;
     }
 
     public async Task StartAsync()
@@ -47,11 +48,11 @@ public class TcpBasedServer : ITransportProtocolBasedServer
                     await using SslStream sslStream = new SslStream(stream, false);
                     await sslStream.AuthenticateAsServerAsync(_serverConfiguration.TlsSettings.Certificate!.X509Certificate2!,
                         false, SslProtocols.Tls12 | SslProtocols.Tls13, false);
-                    await _apiHandler.HandleAsync(sslStream);
+                    await _httpRequestHandler.HandleAsync(sslStream);
                 }
                 else
                 {
-                    await _apiHandler.HandleAsync(stream);
+                    await _httpRequestHandler.HandleAsync(stream);
                 }
             }
         }

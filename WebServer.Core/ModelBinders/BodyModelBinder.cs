@@ -35,7 +35,7 @@ public class BodyModelBinder : IBodyModelBinder
                 $"Action {_methodInternalInfo.Name} in controller has no binding model, but request body is not empty");
         }
 
-        var bindingModel = JsonSerializer.Deserialize(_body, bodyBindingModelType,
+        var bindingModel = JsonSerializer.Deserialize(_body!, bodyBindingModelType,
             new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true

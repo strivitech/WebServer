@@ -15,7 +15,7 @@ public static class ControllersContainer
     public static readonly Dictionary<string, List<ActionInternalInfo>> ControllerNameToMethodsInfo =
         PathToControllerInfo.Values
             .SelectMany(
-                controller => controller.Methods,
+                controller => controller.Actions,
                 (controller, method) => (ControllerName: controller.Type.Name, MethodInfo: method))
             .GroupBy(tuple => tuple.ControllerName, tuple => tuple.MethodInfo)
             .ToDictionary(group => group.Key, group => group.ToList());
