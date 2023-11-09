@@ -8,7 +8,7 @@ public class ActionInternalInfo
     public ActionInternalInfo(MethodInfo methodInfo)
     {
         MethodInfo = methodInfo;
-        Name = methodInfo.GetCustomAttribute<ActionNameAttribute>()!.Name;
+        Name = methodInfo.Name;
         HttpMethodValue = methodInfo.GetCustomAttribute<HttpVerbAttribute>()!.Method;
         CustomAttributeData = methodInfo.GetCustomAttributesData();
         Parameters = methodInfo.GetParameters();

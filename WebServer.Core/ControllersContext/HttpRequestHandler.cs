@@ -3,13 +3,13 @@ using WebServer.Core.Response;
 
 namespace WebServer.Core.ControllersContext;
 
-public class ControllerApiHandler : IApiHandler
+public class HttpRequestHandler : IHttpRequestHandler
 {
     private readonly IHttpRequestReader _httpRequestReader;
     private readonly IHttpResponseWriter _httpResponseWriter;
     private readonly IHttpRequestProcessor _httpRequestProcessor;
 
-    public ControllerApiHandler(
+    public HttpRequestHandler(
         IHttpRequestReader httpRequestReader, 
         IHttpResponseWriter httpResponseWriter,
         IHttpRequestProcessor httpRequestProcessor)

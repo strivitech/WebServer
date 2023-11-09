@@ -1,13 +1,13 @@
 ﻿using System.Web;
-using WebServer.Core.ControllersContext;
+using WebServer.Core.Request;
 
-namespace WebServer.Core.Request;
+namespace WebServer.Core.ControllersContext;
 
-public class WebRequestPathParser
+public class ControllerWebRequestPathParser : IWebRequestPathParser
 {
     private readonly string _fullRequestPath;
 
-    public WebRequestPathParser(string fullRequestPath)
+    public ControllerWebRequestPathParser(string fullRequestPath)
     {
         _fullRequestPath = fullRequestPath ?? throw new ArgumentNullException(nameof(fullRequestPath));
     }
@@ -18,11 +18,17 @@ public class WebRequestPathParser
 
         var pathSegments = GetPathSegments(path);
         var controllerPath = DetermineControllerPath(pathSegments, out var controllersSegments);
-        var action = DetermineAction(pathSegments, controllersSegments);
 
-        var remainingUrlSegments = GetRemainingSegments(pathSegments, controllersSegments + 1);
+        string? action = null;
+        int segmentOffset = ControllerInternalInfoFetcher.Get(controllerPath).IsRest ? 0 : 1;
+        if (segmentOffset > 0) 
+        {
+            action = DetermineAction(pathSegments, controllersSegments);
+        }
+        
+        var remainingUrlSegments = GetRemainingSegments(pathSegments, controllersSegments + segmentOffset);
         var queryParams = ExtractQueryParameters(query);
-
+        
         return new WebRequestRoute(controllerPath, action, remainingUrlSegments, queryParams);
     }
 

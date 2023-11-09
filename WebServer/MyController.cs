@@ -3,11 +3,11 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer;
 
+[Rest]
 [Route($"/api/{nameof(MyController)}")]
 public class MyController : ControllerBase
 {
     [HttpGet]
-    [ActionName(nameof(GetInfo))]
     public async Task<IActionResult> GetInfo()
     {
         return await Ok(new
@@ -35,9 +35,8 @@ public class MyController : ControllerBase
             }
         });
     }
-    
+
     [HttpPost]
-    [ActionName(nameof(PostInfo))]
     public async Task<IActionResult> PostInfo(
         [FromBody] Person person,
         [FromParameters] string country,

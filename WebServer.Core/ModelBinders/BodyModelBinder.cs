@@ -16,12 +16,7 @@ public class BodyModelBinder : IBodyModelBinder
 
     public object? Bind()
     {
-        var bodyBindingModelType = _methodInternalInfo
-            .Parameters
-            .Where(pi => pi.CustomAttributes.Count() == 1
-                         && pi.CustomAttributes.First().AttributeType == typeof(FromBodyAttribute))
-            .Select(pi => pi.ParameterType)
-            .SingleOrDefault();
+        var bodyBindingModelType = GetBodyBindingModelType();
 
         if (string.IsNullOrEmpty(_body) && bodyBindingModelType is not null)
         {
@@ -29,23 +24,34 @@ public class BodyModelBinder : IBodyModelBinder
                 $"Action {_methodInternalInfo.Name} in controller has binding model, but request body is empty");
         }
 
-        if (!string.IsNullOrEmpty(_body))
+        return !string.IsNullOrEmpty(_body) ? BindModel(bodyBindingModelType) : null;
+    }
+
+    private object? BindModel(Type? bodyBindingModelType)
+    {
+        if (bodyBindingModelType is null)
         {
-            if (bodyBindingModelType is null)
-            {
-                throw new InvalidOperationException(
-                    $"Action {_methodInternalInfo.Name} in controller has no binding model, but request body is not empty");
-            }
-
-            var bindingModel = JsonSerializer.Deserialize(_body, bodyBindingModelType,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-
-            return bindingModel;
+            throw new InvalidOperationException(
+                $"Action {_methodInternalInfo.Name} in controller has no binding model, but request body is not empty");
         }
 
-        return null;
+        var bindingModel = JsonSerializer.Deserialize(_body!, bodyBindingModelType,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+        return bindingModel;
+    }
+
+    private Type? GetBodyBindingModelType()
+    {
+        var bodyBindingModelType = _methodInternalInfo
+            .Parameters
+            .Where(pi => pi.CustomAttributes.Count() == 1
+                         && pi.CustomAttributes.First().AttributeType == typeof(FromBodyAttribute))
+            .Select(pi => pi.ParameterType)
+            .SingleOrDefault();
+        return bodyBindingModelType;
     }
 }
