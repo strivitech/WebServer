@@ -13,6 +13,15 @@ public class ActionInternalInfo
         CustomAttributeData = methodInfo.GetCustomAttributesData();
         Parameters = methodInfo.GetParameters();
     }
+    
+    internal ActionInternalInfo(MethodInfo methodInfo, HttpMethodType httpMethodType)
+    {
+        MethodInfo = methodInfo;
+        Name = methodInfo.Name;
+        HttpMethodTypeValue = httpMethodType;
+        CustomAttributeData = methodInfo.GetCustomAttributesData();
+        Parameters = methodInfo.GetParameters();
+    }
 
     public MethodInfo MethodInfo { get; }
 
