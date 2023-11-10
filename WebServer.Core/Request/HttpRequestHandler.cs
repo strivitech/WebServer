@@ -1,7 +1,6 @@
-using WebServer.Core.Request;
 using WebServer.Core.Response;
 
-namespace WebServer.Core.ControllersContext;
+namespace WebServer.Core.Request;
 
 public class HttpRequestHandler : IHttpRequestHandler
 {

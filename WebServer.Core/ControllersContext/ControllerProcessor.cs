@@ -1,8 +1,8 @@
-using WebServer.Core.ControllersContext;
 using WebServer.Core.ControllersContext.Actions;
+using WebServer.Core.ModelBinders;
 using WebServer.Core.Request;
 
-namespace WebServer.Core.ModelBinders;
+namespace WebServer.Core.ControllersContext;
 
 public class ControllerProcessor : IHttpRequestProcessor
 {
@@ -21,7 +21,7 @@ public class ControllerProcessor : IHttpRequestProcessor
     public async Task<IActionResult> CompleteAsync(HttpRequest httpRequest)
     {
         var webRequestRoute = new ControllerWebRequestPathParser(httpRequest.HttpRequestMetadata.Path).Parse();
-        var controllerInternalInfo = ControllerInternalInfoFetcher.Get(webRequestRoute.ControllerRoute);
+        var controllerInternalInfo = ControllerInternalInfoFetcher.Get(webRequestRoute.OperatingPath);
         var actionInfoFetcher = _actionInfoFetcherFactory.Create(controllerInternalInfo,
             httpRequest.HttpRequestMetadata.Method, webRequestRoute.ActionName);
         var methodInternalInfo = actionInfoFetcher.Get();

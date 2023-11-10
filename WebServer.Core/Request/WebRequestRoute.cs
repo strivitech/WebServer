@@ -2,7 +2,7 @@
 
 public class WebRequestRoute
 {
-    public string ControllerRoute { get; }
+    public string OperatingPath { get; }
 
     public string? ActionName { get; }
 
@@ -10,10 +10,10 @@ public class WebRequestRoute
 
     public Dictionary<string, string?> QueryParameters { get; }
 
-    public WebRequestRoute(string controllerRoute, string? actionName, List<string> urlParameters,
+    public WebRequestRoute(string operatingPath, string? actionName, List<string> urlParameters,
         Dictionary<string, string?> queryParameters)
     {
-        ControllerRoute = controllerRoute;
+        OperatingPath = operatingPath;
         ActionName = actionName;
         UrlParameters = urlParameters;
         QueryParameters = queryParameters;
