@@ -1,13 +1,13 @@
-﻿using HttpMethod = WebServer.Core.Common.HttpMethod;
+﻿using WebServer.Core.Common;
 
 namespace WebServer.Core.ControllersContext.Actions;
 
 public abstract class HttpVerbAttribute : Attribute
 {
-    protected HttpVerbAttribute(HttpMethod method)
+    protected HttpVerbAttribute(HttpMethodType methodType)
     {
-        Method = method;
+        MethodType = methodType;
     }
 
-    public HttpMethod Method { get; set; }
+    public HttpMethodType MethodType { get; set; }
 }
