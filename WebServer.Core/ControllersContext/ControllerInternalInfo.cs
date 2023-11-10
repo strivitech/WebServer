@@ -45,7 +45,7 @@ public class ControllerInternalInfo
     private void RequireNoHttpMethodDuplicates(List<IGrouping<string, MethodInfo>> methodGroups)
     {
         var duplicateHttpMethods = methodGroups
-            .SelectMany(group => group.Select(m => m.GetCustomAttribute<HttpVerbAttribute>()!.Method))
+            .SelectMany(group => group.Select(m => m.GetCustomAttribute<HttpVerbAttribute>()!.MethodType))
             .GroupBy(method => method)
             .Where(group => group.Count() > 1)
             .Select(group => group.Key)

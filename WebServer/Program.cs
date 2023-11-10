@@ -1,8 +1,11 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using WebServer;
 using WebServer.Core;
+using WebServer.Core.Application;
 using WebServer.Core.Configuration;
 using WebServer.Core.ControllersContext;
 using WebServer.Core.ControllersContext.Actions;
+using WebServer.Core.MinimalApiContext;
 using WebServer.Core.ModelBinders;
 using WebServer.Core.Request;
 using WebServer.Core.Request.Headers;
@@ -27,11 +30,36 @@ var serverConfiguration = new ServerConfiguration
     }
 };
 
-var controllerApiHandler = new HttpRequestHandler(new HttpRequestReader(new HttpRequestHeadersValidator(
-    new ContentTypeValidator(),
-    new ContentLengthValidator())),
-    new HttpResponseWriter(new ResponseBuilder()),
-    new ControllerProcessor(new ControllerFactory(), new BindersFactory(), new ActionInfoFetcherFactory()));
+// var requestHandler = new HttpRequestHandler(new HttpRequestReader(new HttpRequestHeadersValidator(
+//     new ContentTypeValidator(),
+//     new ContentLengthValidator())),
+//     new HttpResponseWriter(new ResponseBuilder()),
+//     new ControllerProcessor(new ControllerFactory(), new BindersFactory(), new ActionInfoFetcherFactory()));
 
-var server = new TcpBasedServer(controllerApiHandler, serverConfiguration);
+IAppBuilder appBuilder = new AppBuilder();
+appBuilder.UseEndpoints()
+    .MapGet("/api/MyController", () => Results.Ok("Hello World!"))
+    .MapPost("/api/MyController", async ([FromBody] Person person,
+        [FromParameters] string country,
+        [FromParameters] string city,
+        [FromParameters] string street,
+        [FromQuery] Car car) => await Results.Ok(new
+    {
+        Person = person,
+        Address = new
+        {
+            Country = country,
+            City = city,
+            Street = street
+        },
+        Car = car
+    }));
+
+var requestHandler = new HttpRequestHandler(new HttpRequestReader(new HttpRequestHeadersValidator(
+        new ContentTypeValidator(),
+        new ContentLengthValidator())),
+    new HttpResponseWriter(new ResponseBuilder()),
+    new MinimalApiProcessor(new BindersFactory()));
+
+var server = new TcpBasedServer(requestHandler, serverConfiguration);
 await server.StartAsync();

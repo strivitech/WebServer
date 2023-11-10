@@ -3,9 +3,9 @@
 namespace WebServer.Core.ControllersContext.Actions;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class HttpGetAttribute : HttpVerbAttribute
+public class HttpTraceAttribute : HttpVerbAttribute
 {
-    public HttpGetAttribute() : base(HttpMethodType.Get)
+    public HttpTraceAttribute() : base(HttpMethodType.Trace)
     {
     }
 }

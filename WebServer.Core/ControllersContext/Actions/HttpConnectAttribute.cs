@@ -3,9 +3,9 @@
 namespace WebServer.Core.ControllersContext.Actions;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class HttpGetAttribute : HttpVerbAttribute
+public class HttpConnectAttribute : HttpVerbAttribute
 {
-    public HttpGetAttribute() : base(HttpMethodType.Get)
+    public HttpConnectAttribute() : base(HttpMethodType.Connect)
     {
     }
 }

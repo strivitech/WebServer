@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using HttpMethod = WebServer.Core.Common.HttpMethod;
+using WebServer.Core.Common;
 
 namespace WebServer.Core.ControllersContext.Actions;
 
@@ -9,7 +9,16 @@ public class ActionInternalInfo
     {
         MethodInfo = methodInfo;
         Name = methodInfo.Name;
-        HttpMethodValue = methodInfo.GetCustomAttribute<HttpVerbAttribute>()!.Method;
+        HttpMethodTypeValue = methodInfo.GetCustomAttribute<HttpVerbAttribute>()!.MethodType;
+        CustomAttributeData = methodInfo.GetCustomAttributesData();
+        Parameters = methodInfo.GetParameters();
+    }
+    
+    internal ActionInternalInfo(MethodInfo methodInfo, HttpMethodType httpMethodType)
+    {
+        MethodInfo = methodInfo;
+        Name = methodInfo.Name;
+        HttpMethodTypeValue = httpMethodType;
         CustomAttributeData = methodInfo.GetCustomAttributesData();
         Parameters = methodInfo.GetParameters();
     }
@@ -18,7 +27,7 @@ public class ActionInternalInfo
 
     public string Name { get; }
     
-    public HttpMethod HttpMethodValue { get; }
+    public HttpMethodType HttpMethodTypeValue { get; }
 
     public IList<CustomAttributeData> CustomAttributeData { get; }
 

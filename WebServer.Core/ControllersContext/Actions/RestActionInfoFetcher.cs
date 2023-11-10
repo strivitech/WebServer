@@ -21,7 +21,7 @@ public class RestActionInfoFetcher : IActionInternalInfoFetcher
         }
 
         var methodInternalInfo = methodsInternalInfo.SingleOrDefault(m =>
-            string.Equals(m.HttpMethodValue.ToString(), _httpMethod, StringComparison.OrdinalIgnoreCase));
+            string.Equals(m.HttpMethodTypeValue.ToString(), _httpMethod, StringComparison.OrdinalIgnoreCase));
 
         if (methodInternalInfo is null)
         {
