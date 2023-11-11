@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Request.Headers;
 
-public class HttpRequestHeadersValidator : IHttpRequestHeadersValidator
+internal class HttpRequestHeadersValidator : IHttpRequestHeadersValidator
 {
     private readonly IContentTypeValidator _contentTypeValidator;
     private readonly IContentLengthValidator _contentLengthValidator;

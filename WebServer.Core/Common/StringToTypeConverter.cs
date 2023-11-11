@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Common;
 
-public class StringToTypeConverter : IStringToTypeConverter
+internal class StringToTypeConverter : IStringToTypeConverter
 {
     public object Convert(string value, Type targetType)
     {

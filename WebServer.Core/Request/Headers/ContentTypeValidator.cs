@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Request.Headers;
 
-public class ContentTypeValidator : IContentTypeValidator
+internal class ContentTypeValidator : IContentTypeValidator
 {
     public void ValidateContentType(string contentType)
     {

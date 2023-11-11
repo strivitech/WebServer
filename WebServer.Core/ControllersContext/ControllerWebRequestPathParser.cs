@@ -3,7 +3,7 @@ using WebServer.Core.Request;
 
 namespace WebServer.Core.ControllersContext;
 
-public class ControllerWebRequestPathParser : IWebRequestPathParser
+internal class ControllerWebRequestPathParser : IWebRequestPathParser
 {
     private readonly string _fullRequestPath;
 

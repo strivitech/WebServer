@@ -2,7 +2,7 @@
 
 namespace WebServer.Core.ControllersContext.Actions;
 
-public static class ActionsContainer
+internal static class ActionsContainer
 {
     public static readonly Dictionary<string, PropertyInfo[]> FullNameToProperties =
         ControllersContainer.ControllerNameToMethodsInfo.Values

@@ -1,5 +1,3 @@
 namespace WebServer.Core.ControllersContext;
 
-public interface IController
-{
-}
+public interface IController;

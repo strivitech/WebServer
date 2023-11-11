@@ -3,7 +3,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ModelBinders;
 
-public class ParametersModelBinder : IParametersModelBinder
+internal class ParametersModelBinder : IParametersModelBinder
 {
     private readonly IList<string> _urlParameters;
     private readonly ActionInternalInfo _methodInternalInfo;

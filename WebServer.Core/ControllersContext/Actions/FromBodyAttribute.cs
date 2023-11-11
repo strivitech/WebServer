@@ -1,5 +1,3 @@
 ﻿namespace WebServer.Core.ControllersContext.Actions;
 
-public class FromBodyAttribute : Attribute
-{
-}
+public class FromBodyAttribute : Attribute;

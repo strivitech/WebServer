@@ -2,7 +2,7 @@ using WebServer.Core.Response;
 
 namespace WebServer.Core.Request;
 
-public class HttpRequestHandler : IHttpRequestHandler
+internal class HttpRequestHandler : IHttpRequestHandler
 {
     private readonly IHttpRequestReader _httpRequestReader;
     private readonly IHttpResponseWriter _httpResponseWriter;

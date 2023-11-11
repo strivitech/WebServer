@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Request;
 
-public class WebRequestRoute
+internal class WebRequestRoute
 {
     public string OperatingPath { get; }
 

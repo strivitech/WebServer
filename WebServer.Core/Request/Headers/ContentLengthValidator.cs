@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Request.Headers;
 
-public class ContentLengthValidator : IContentLengthValidator
+internal class ContentLengthValidator : IContentLengthValidator
 {
     public void ValidateContentLength(string contentLength)
     {

@@ -3,7 +3,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ControllersContext;
 
-public static class ControllersContainer
+internal static class ControllersContainer
 {
     public static readonly Dictionary<string, ControllerInternalInfo> PathToControllerInfo =
         AppDomain.CurrentDomain.GetAssemblies()

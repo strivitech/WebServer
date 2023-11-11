@@ -3,7 +3,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ControllersContext;
 
-public class ControllerInternalInfo
+internal class ControllerInternalInfo
 {
     public ControllerInternalInfo(Type type)
     {

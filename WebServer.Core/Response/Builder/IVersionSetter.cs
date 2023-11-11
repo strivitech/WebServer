@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Response.Builder;
 
-public interface IVersionSetter
+internal interface IVersionSetter
 {
     IStatusCodeSetter UseVersion(string httpVersion);
 }

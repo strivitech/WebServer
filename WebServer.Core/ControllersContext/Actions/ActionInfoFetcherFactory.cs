@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.ControllersContext.Actions;
 
-public class ActionInfoFetcherFactory : IActionInfoFetcherFactory
+internal class ActionInfoFetcherFactory : IActionInfoFetcherFactory
 {
     public IActionInternalInfoFetcher Create(ControllerInternalInfo controllerInternalInfo, string httpMethod,
         string? actionName)

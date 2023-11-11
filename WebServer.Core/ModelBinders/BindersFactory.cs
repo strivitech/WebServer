@@ -3,7 +3,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ModelBinders;
 
-public class BindersFactory : IBindersFactory
+internal class BindersFactory : IBindersFactory
 {
     public IBodyModelBinder CreateBodyModelBinder(string? body, ActionInternalInfo methodInternalInfo)
     {

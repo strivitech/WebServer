@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.ControllersContext;
 
-public static class ControllerInternalInfoFetcher
+internal static class ControllerInternalInfoFetcher
 {
     public static ControllerInternalInfo Get(string controllerPath)
     {

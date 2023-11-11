@@ -1,5 +1,3 @@
 ﻿namespace WebServer.Core.MinimalApiContext;
 
-public interface IEndpointsBuilder
-{
-}
+public interface IEndpointsBuilder;

@@ -2,7 +2,7 @@ using WebServer.Core.Request.Headers;
 
 namespace WebServer.Core.Request;
 
-public class HttpRequestReader : IHttpRequestReader
+internal class HttpRequestReader : IHttpRequestReader
 {
     private readonly IHttpRequestHeadersValidator _headersValidator;
 

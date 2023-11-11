@@ -5,7 +5,7 @@ using WebServer.Core.Request;
 
 namespace WebServer.Core.MinimalApiContext;
 
-public class MinimalApiProcessor : IHttpRequestProcessor
+internal class MinimalApiProcessor : IHttpRequestProcessor
 {
     private readonly IBindersFactory _bindersFactory;
 

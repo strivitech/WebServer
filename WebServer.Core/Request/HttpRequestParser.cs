@@ -1,6 +1,6 @@
 namespace WebServer.Core.Request;
 
-public static class HttpRequestParser
+internal static class HttpRequestParser
 {
     public static HttpRequestMetadata ParseMetadata(string? line)
     {
