@@ -1,5 +1,3 @@
 ﻿namespace WebServer.Core.ModelBinders;
 
-public interface IBodyModelBinder : IModelBinder<object>
-{
-}
+internal interface IBodyModelBinder : IModelBinder<object>;

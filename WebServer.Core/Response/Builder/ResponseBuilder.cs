@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace WebServer.Core.Response.Builder;
 
-public partial class ResponseBuilder : IResponseBuilder
+internal partial class ResponseBuilder : IResponseBuilder
 {
     private string _httpVersion = null!;
     private int _statusCode;

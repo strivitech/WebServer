@@ -7,7 +7,7 @@ using WebServer.Core.Request;
 
 namespace WebServer.Core.Transport;
 
-public class TcpBasedServer : ITransportProtocolBasedServer
+internal class TcpBasedServer : ITransportProtocolBasedServer
 {
     private readonly ServerConfiguration _serverConfiguration;
     private readonly IHttpRequestHandler _httpRequestHandler;

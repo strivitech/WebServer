@@ -2,7 +2,7 @@
 
 namespace WebServer.Core.Request;
 
-public interface IHttpRequestProcessor
+internal interface IHttpRequestProcessor
 {
     Task<IActionResult> CompleteAsync(HttpRequest httpRequest);
 }

@@ -1,8 +1,3 @@
-﻿using WebServer.Core.MinimalApiContext;
+﻿namespace WebServer.Core.Application;
 
-namespace WebServer.Core.Application;
-
-public interface IAppBuilder : IEndpointsBuilder
-{
-    IEndpointsBuilder UseEndpoints();
-}
+internal interface IAppBuilder : IFinalAppBuilder, IConfigurationSetup, IRequestProcessorSetup;

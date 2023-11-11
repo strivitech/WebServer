@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Common;
 
-public static class CustomClass
+internal static class CustomClass
 {
     public static bool IsCustomClass(Type type)
     {

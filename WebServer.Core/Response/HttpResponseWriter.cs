@@ -2,7 +2,7 @@ using WebServer.Core.Response.Builder;
 
 namespace WebServer.Core.Response;
 
-public class HttpResponseWriter : IHttpResponseWriter
+internal class HttpResponseWriter : IHttpResponseWriter
 {
     private readonly IResponseBuilder _responseBuilder;
 

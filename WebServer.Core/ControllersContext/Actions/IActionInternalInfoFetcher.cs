@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.ControllersContext.Actions;
 
-public interface IActionInternalInfoFetcher
+internal interface IActionInternalInfoFetcher
 {
     ActionInternalInfo Get();
 }

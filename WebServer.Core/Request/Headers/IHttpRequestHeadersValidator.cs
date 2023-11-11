@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Request.Headers;
 
-public interface IHttpRequestHeadersValidator
+internal interface IHttpRequestHeadersValidator
 {
     void ValidateHeaders(Dictionary<string, string> headers);
 }

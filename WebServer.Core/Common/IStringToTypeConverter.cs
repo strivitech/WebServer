@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Common;
 
-public interface IStringToTypeConverter
+internal interface IStringToTypeConverter
 {
     object Convert(string value, Type targetType);
 }

@@ -4,7 +4,7 @@ using WebServer.Core.Request;
 
 namespace WebServer.Core.MinimalApiContext;
 
-public class EndpointsWebRequestParser : IWebRequestPathParser
+internal class EndpointsWebRequestParser : IWebRequestPathParser
 {
     private readonly string _fullRequestPath;
     private readonly HttpMethodType _httpMethodType;

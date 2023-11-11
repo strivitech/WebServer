@@ -1,6 +1,4 @@
 ﻿namespace WebServer.Core.ControllersContext;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class RestAttribute : Attribute
-{
-}
+public class RestAttribute : Attribute;

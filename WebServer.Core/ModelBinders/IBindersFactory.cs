@@ -2,7 +2,7 @@
 
 namespace WebServer.Core.ModelBinders;
 
-public interface IBindersFactory
+internal interface IBindersFactory
 {
     IBodyModelBinder CreateBodyModelBinder(string? body, ActionInternalInfo methodInternalInfo);
 

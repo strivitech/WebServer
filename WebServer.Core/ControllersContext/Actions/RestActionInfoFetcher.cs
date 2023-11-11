@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.ControllersContext.Actions;
 
-public class RestActionInfoFetcher : IActionInternalInfoFetcher
+internal class RestActionInfoFetcher : IActionInternalInfoFetcher
 {
     private readonly string _httpMethod;
     private readonly string _controllerName;

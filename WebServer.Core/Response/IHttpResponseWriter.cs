@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Response;
 
-public interface IHttpResponseWriter
+internal interface IHttpResponseWriter
 {
     Task WriteAsync(Stream stream, HttpResponse httpResponse);
 }

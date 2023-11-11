@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.ControllersContext.Actions;
 
-public class OrdinalActionInfoFetcher : IActionInternalInfoFetcher
+internal class OrdinalActionInfoFetcher : IActionInternalInfoFetcher
 {
     private readonly string _httpMethod;
     private readonly string _controllerName;

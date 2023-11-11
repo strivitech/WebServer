@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Response.Builder;
 
-public interface IFinalBuilder
+internal interface IFinalBuilder
 {
     string Build();
 }

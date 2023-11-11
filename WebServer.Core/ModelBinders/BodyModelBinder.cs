@@ -3,7 +3,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ModelBinders;
 
-public class BodyModelBinder : IBodyModelBinder
+internal class BodyModelBinder : IBodyModelBinder
 {
     private readonly string? _body;
     private readonly ActionInternalInfo _methodInternalInfo;

@@ -1,6 +1,6 @@
 ﻿namespace WebServer.Core.Request;
 
-public interface IWebRequestPathParser
+internal interface IWebRequestPathParser
 {
     WebRequestRoute Parse();
 }

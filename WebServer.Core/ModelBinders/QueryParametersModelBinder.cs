@@ -4,7 +4,7 @@ using WebServer.Core.ControllersContext.Actions;
 
 namespace WebServer.Core.ModelBinders;
 
-public class QueryParametersModelBinder : IQueryParametersModelBinder
+internal class QueryParametersModelBinder : IQueryParametersModelBinder
 {
     private readonly IDictionary<string, string?> _queryParameters;
     private readonly ActionInternalInfo _methodInternalInfo;

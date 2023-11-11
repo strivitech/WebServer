@@ -1,5 +1,4 @@
 ﻿namespace WebServer.Core.ControllersContext.Actions;
 
-public class FromParametersAttribute : Attribute
-{
-}
+[AttributeUsage(AttributeTargets.Parameter)]
+public class FromParametersAttribute : Attribute;

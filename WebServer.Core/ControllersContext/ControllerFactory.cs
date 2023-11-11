@@ -1,6 +1,6 @@
 namespace WebServer.Core.ControllersContext;
 
-public class ControllerFactory : IControllerFactory
+internal class ControllerFactory : IControllerFactory
 {
     public object Create(Type controllerType)
     {

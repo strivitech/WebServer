@@ -4,7 +4,7 @@ using WebServer.Core.Request;
 
 namespace WebServer.Core.ControllersContext;
 
-public class ControllerProcessor : IHttpRequestProcessor
+internal class ControllerProcessor : IHttpRequestProcessor
 {
     private readonly IControllerFactory _controllerFactory;
     private readonly IBindersFactory _bindersFactory;
