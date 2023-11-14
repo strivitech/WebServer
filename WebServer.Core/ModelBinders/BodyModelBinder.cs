@@ -48,8 +48,8 @@ internal class BodyModelBinder : IBodyModelBinder
     {
         var bodyBindingModelType = _methodInternalInfo
             .Parameters
-            .Where(pi => pi.CustomAttributes.Count() == 1
-                         && pi.CustomAttributes.First().AttributeType == typeof(FromBodyAttribute))
+            .Where(pi => pi.CustomAttributes.ValidateModelBinderAttributes()
+                         && pi.CustomAttributes.Any(cad => cad.AttributeType == typeof(FromBodyAttribute)))
             .Select(pi => pi.ParameterType)
             .SingleOrDefault();
         return bodyBindingModelType;
