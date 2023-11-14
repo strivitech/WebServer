@@ -1,9 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using WebServer;
 using WebServer.Core.Application;
 using WebServer.Core.Configuration;
-using WebServer.Core.ControllersContext.Actions;
-using WebServer.Core.MinimalApiContext;
+using WebServer.MinimalApi;
 
 var appBuilder = new AppBuilder()
     .Configure(() => new ServerConfiguration
@@ -17,27 +15,10 @@ var appBuilder = new AppBuilder()
             }
         }
     })
-    .AddRequestProcessor(RequestProcessorType.MinimalApi);
+    .AddRequestProcessor(RequestProcessorType.Controllers); // set RequestProcessorType to MinimalApi to use MinimalApi
 
 var app = appBuilder.Build();
-
-app.UseEndpoints()
-    .MapGet("/api/MyController", () => Results.Ok("Hello World!"))
-    .MapPost("/api/MyController", async ([FromBody] Person person,
-        [FromParameters] string country,
-        [FromParameters] string city,
-        [FromParameters] string street,
-        [FromQuery] Car car) => await Results.Ok(new
-    {
-        Person = person,
-        Address = new
-        {
-            Country = country,
-            City = city,
-            Street = street
-        },
-        Car = car
-    }));
+// app.UseEndpoints().MapPersonEndpoints(); // configure endpoints if RequestProcessorType is set to MinimalApi
 
 await app.RunAsync();
 
