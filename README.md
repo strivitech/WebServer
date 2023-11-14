@@ -244,6 +244,23 @@ public class InfoOrdinalController : ControllerBase
             },
         }));
     }
+
+    [HttpGet]
+    public Task<IActionResult> GetMyData(
+        [FromBody] GetPersonRequest request,
+        [FromParameters] string country,
+        [FromParameters] string city,
+        [FromQuery] int age
+        )
+    {   
+        return Task.FromResult(Ok(new
+        {
+            request.Id,
+            Country = country,
+            City = city,
+            Age = age
+        }));
+    }
 }
 ```
 
@@ -254,9 +271,40 @@ public class InfoOrdinalController : ControllerBase
 
 ### Using Postman to Access InfoOrdinalController
 
+Get Info
 - URL: `https://localhost/api/Information/GetInfo`
 - Method: GET
 - Description: To fetch server information such as its name, version, and port.
+
+Get MyData
+- URL: `/api/Information/GetMyData/{country}/{city}`
+- Method: GET
+- Functionality: This method demonstrates the use of complex types in route parameters, query strings, and request bodies.
+- Order of Attributes: The method prioritizes data from the request body, followed by route parameters, and finally query strings.
+
+Usage Example
+Postman URL: `https://localhost/api/Information/GetMyData/UK/London?Age=30`
+Request Body (application/json):
+
+```
+{
+    "Id": "11c83ceb-3020-438b-9a39-693ef71d10d2" 
+}
+```
+
+## Parameter Handling:
+### Attribute Priority Order:
+Methods adhere to a specific order when handling attributes:
+- Body: Data from the request body is considered first.
+- Parameters: Route parameters are evaluated next.
+- Query: Lastly, query string values are taken into account.
+
+Body and Query Expectations:
+- Complex Types: Both the body and query expect a single complex type, typically custom classes.
+Parameters Handling:
+- Types: Can use both built-in types and custom classes.
+- Custom Classes: If a custom class is used in parameters, it must be singular.
+- Built-in Types: Multiple built-in type parameters are supported.
 
 ## MinimalAPI Example in WebServer
 
