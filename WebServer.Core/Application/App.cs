@@ -1,4 +1,6 @@
 ﻿using WebServer.Core.Configuration;
+using WebServer.Core.ControllersContext;
+using WebServer.Core.ControllersContext.Actions;
 using WebServer.Core.Request;
 using WebServer.Core.Request.Headers;
 using WebServer.Core.Response;
@@ -7,7 +9,7 @@ using WebServer.Core.Transport;
 
 namespace WebServer.Core.Application;
 
-public class App : IApp
+public class App
 {
     internal App()
     {
@@ -20,6 +22,7 @@ public class App : IApp
     public async Task RunAsync()
     {
         ThrowIfNotValidState();
+        InitializeContainers();
         
         var requestHandler = new HttpRequestHandler(new HttpRequestReader(new HttpRequestHeadersValidator(
                 new ContentTypeValidator(),
@@ -41,6 +44,16 @@ public class App : IApp
         if (ServerConfiguration is null)
         {
             throw new InvalidOperationException("ServerConfiguration is not set");
+        }
+    }
+
+    private void InitializeContainers()
+    {
+        if (HttpRequestProcessor!.GetType() == typeof(ControllerProcessor))
+        {
+            _ = ControllersContainer.PathToControllerInfo;
+            _ = ControllersContainer.ControllerNameToMethodsInfo;
+            _ = ActionsContainer.FullNameToProperties;
         }
     }
 }
