@@ -1,3 +1,5 @@
+using System.Net;
+using WebServer.Core.ControllersContext.Actions;
 using WebServer.Core.Response;
 
 namespace WebServer.Core.Request;
@@ -21,8 +23,21 @@ internal class HttpRequestHandler : IHttpRequestHandler
     public async Task HandleAsync(Stream stream)
     {
         var request = await _httpRequestReader.ReadAsync(stream);
-        var result = await _httpRequestProcessor.CompleteAsync(request);
+        var result = await CompleteRequestAsync(request);
         await _httpResponseWriter.WriteAsync(stream,
             new HttpResponse(result.StatusCode, result.Content));
+    }
+
+    private async Task<IActionResult> CompleteRequestAsync(HttpRequest request)
+    {
+        try
+        {
+            return await _httpRequestProcessor.CompleteAsync(request);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return new ObjectResult(null, HttpStatusCode.InternalServerError);
+        }
     }
 }
