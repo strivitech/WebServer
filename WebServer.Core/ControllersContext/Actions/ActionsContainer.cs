@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Collections.Frozen;
+using System.Reflection;
 
 namespace WebServer.Core.ControllersContext.Actions;
 
 internal static class ActionsContainer
 {
-    public static readonly Dictionary<string, PropertyInfo[]> FullNameToProperties =
+    public static readonly FrozenDictionary<string, PropertyInfo[]> FullNameToProperties =
         ControllersContainer.ControllerNameToMethodsInfo.Values
             .SelectMany(methods => methods
                 .SelectMany(ai => ai.Parameters
@@ -16,7 +17,7 @@ internal static class ActionsContainer
                         Properties = pi.ParameterType.GetProperties()
                     })))
             .GroupBy(x => x.FullName!)
-            .ToDictionary(g =>
+            .ToFrozenDictionary(g =>
                     g.Key,
                 g => g.SelectMany(x => x.Properties).Distinct().ToArray());
 }
