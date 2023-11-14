@@ -4,7 +4,7 @@ namespace WebServer.Core.Application;
 
 public static class ApplicationExtensions
 {
-    public static IEndpointsBuilder UseEndpoints(this IApp app)
+    public static IEndpointsBuilder UseEndpoints(this App app)
     {
         return new EndpointsBuilder();
     }
