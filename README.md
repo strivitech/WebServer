@@ -155,7 +155,7 @@ public class PersonController : ControllerBase
 - Description: Fetches a person's details based on their ID.
 
 2. Create Person:
-- URL: https://localhost/api/Person
+- URL: `https://localhost/api/Person`
 - Method: POST
 - Description: Creates a new person record
 - Body (application/json):
@@ -183,7 +183,7 @@ public class PersonController : ControllerBase
 ```
 
 3. Update Person:
-- URL: https://localhost/api/Person
+- URL: `https://localhost/api/Person`
 - Method: PUT
 - Description: Updates the details of an existing person
 - Body (application/json):
@@ -212,7 +212,7 @@ public class PersonController : ControllerBase
 ```
 
 4. Delete Person:
-- URL: https://localhost/api/Person
+- URL: `https://localhost/api/Person`
 - Method: DELETE
 - Description: Deletes a person's record based on their ID
 - Body (application/json):
@@ -254,7 +254,7 @@ public class InfoOrdinalController : ControllerBase
 
 ### Using Postman to Access InfoOrdinalController
 
-- URL: https://localhost/api/Information/GetInfo
+- URL: `https://localhost/api/Information/GetInfo`
 - Method: GET
 - Description: To fetch server information such as its name, version, and port.
 
@@ -327,18 +327,18 @@ Endpoints Class Overview
 
 ### Defining Routes and Actions
 
-GET /api/Person:
+GET `/api/Person`:
 - Fetches a person's details based on the provided query parameters.
 - Returns Results.Ok on success, and Results.BadRequest on failure.
 
-POST /api/Person:
+POST `/api/Person`:
 - Creates a new person record.
 - Returns Results.Ok for successful creation, and Results.BadRequest for errors.
 
-PUT /api/Person:
+PUT `/api/Person`:
 - Updates an existing person's details.
 - Responds with Results.Ok on successful update, or Results.BadRequest if an error occurs.
 
-DELETE /api/Person:
+DELETE `/api/Person`:
 - Deletes a person based on the provided ID.
 - Returns Results.Ok for successful deletion, and Results.BadRequest in case of an error.
