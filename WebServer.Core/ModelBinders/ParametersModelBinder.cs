@@ -47,8 +47,8 @@ internal class ParametersModelBinder : IParametersModelBinder
     {
         var parametersBindingModelTypes = _methodInternalInfo
             .Parameters
-            .Where(pi => pi.CustomAttributes.Count() == 1
-                         && pi.CustomAttributes.First().AttributeType == typeof(FromParametersAttribute))
+            .Where(pi => pi.CustomAttributes.ValidateModelBinderAttributes()
+                         && pi.CustomAttributes.Any(cad => cad.AttributeType == typeof(FromParametersAttribute)))
             .Select(pi => pi.ParameterType)
             .ToList();
         return parametersBindingModelTypes;

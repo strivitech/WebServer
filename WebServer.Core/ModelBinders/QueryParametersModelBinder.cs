@@ -38,8 +38,8 @@ internal class QueryParametersModelBinder : IQueryParametersModelBinder
     {
         var queryParametersBindingModels = _methodInternalInfo
             .Parameters
-            .Where(pi => pi.CustomAttributes.Count() == 1
-                         && pi.CustomAttributes.First().AttributeType == typeof(FromQueryAttribute))
+            .Where(pi => pi.CustomAttributes.ValidateModelBinderAttributes()
+                         && pi.CustomAttributes.Any(cad => cad.AttributeType == typeof(FromQueryAttribute)))
             .Select(pi => new QueryParameterBindingModel { Name = pi.Name, Type = pi.ParameterType })
             .ToList();
         return queryParametersBindingModels;
